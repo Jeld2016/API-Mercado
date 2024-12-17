@@ -6,7 +6,8 @@ import { MessageService } from 'primeng/api';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { api_key, apiUrl } from '../../environments/environment';
+
+
 
 @Component({
   selector: 'app-multiproductos',
@@ -14,8 +15,8 @@ import { api_key, apiUrl } from '../../environments/environment';
   styleUrl: './multiproductos.component.css'
 })
 export class MultiproductosComponent {
-  aUrl = apiUrl;
-  apiKey = api_key;
+  aUrl = 'https://api.openai.com/v1/chat/completions';
+  apiKey = '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';
   ASIN:string = '';
   ASINS: any;
   categoria:string = '';
