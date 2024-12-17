@@ -1,0 +1,26 @@
+<app-login *ngIf="!sesion"></app-login>
+<div class="card h-100" *ngIf="sesion">
+    <!-- <p-menubar [model]="menubarItems">
+        <ng-template pTemplate="start">
+            <i class="pi pi-apple"></i>
+        </ng-template>
+        <ng-template pTemplate="end">
+            <i class="pi pi-video"></i>
+            <i class="pi pi-wifi"></i>
+            <i class="pi pi-volume-up"></i>
+            <span>Fri 13:07</span>
+            <i class="pi pi-search"></i>
+            <i class="pi pi-bars"></i>
+        </ng-template>
+    </p-menubar> -->
+    <div class="dock-window dock-advanced">
+        <p-dock [model]="dockItems" position="bottom">
+            <ng-template pTemplate="item" let-item>
+                <img [src]="item.icon" [alt]="item.label" width="100%" />
+            </ng-template>
+        </p-dock>
+
+        <p-toast></p-toast>
+        <router-outlet class="m-3" style="max-height: 80vh;height: 100%;"></router-outlet>
+    </div>
+</div>
