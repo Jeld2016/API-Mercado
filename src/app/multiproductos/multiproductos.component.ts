@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 
 
 
+
+
 @Component({
   selector: 'app-multiproductos',
   templateUrl: './multiproductos.component.html',
@@ -16,7 +18,7 @@ import { Observable } from 'rxjs';
 })
 export class MultiproductosComponent {
   aUrl = 'https://api.openai.com/v1/chat/completions';
-  apiKey = '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';
+  apiKey = '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';
   ASIN:string = '';
   ASINS: any;
   categoria:string = '';
@@ -79,8 +81,8 @@ public async multiSearch(): Promise<void> {
     this.ASINS = response;
     console.log(this.ASINS);
 
-    const promises = this.ASINS.asins.map((element: { asin: string, prime: boolean }) => 
-      this.masiveSearch(element.asin, element.prime)  // Pasa el valor de 'prime' a masiveSearch
+    const promises = this.ASINS.asins.map((element: { asin: string, esPrime: boolean }) => 
+      this.masiveSearch(element.asin, element.esPrime)  // Pasa el valor de 'prime' a masiveSearch
     );
     await Promise.all(promises);
     
@@ -246,7 +248,7 @@ limpiarPublicacion(){
 }
 }
 
-public publicar() {
+  /*public publicar() {
 
   for (let i = 0; i < this.Publicaciones.length; i++) {
     this.app_service.publicarProducto(this.Publicaciones[i]).subscribe({
@@ -261,6 +263,40 @@ public publicar() {
       }
     });
   }
+}*/
+
+public publicar() {
+  const MAX_CONCURRENT = 5; // Número máximo de solicitudes simultáneas
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  let activeRequests = 0;
+
+  const publicarProducto = async (publicacion: any, index: number) => {
+    while (activeRequests >= MAX_CONCURRENT) {
+      await delay(4000); // Espera breve antes de reintentar
+    }
+
+    activeRequests++;
+    try {
+      await this.app_service.publicarProducto(publicacion).toPromise();
+      this.contadorExitos++;
+      console.log(`Producto publicado con éxito: ${index}`);
+    } catch (err) {
+      console.error(`Error al publicar el producto ${index}`, err);
+    } finally {
+      activeRequests--;
+    }
+  };
+
+  (async () => {
+    const tareas = this.Publicaciones.map((publicacion, index) =>
+      publicarProducto(publicacion, index)
+    );
+
+    await Promise.all(tareas); // Espera a que todas las tareas se completen
+    this.finPublicaciones = true;
+    console.log("Publicaciones completadas.");
+  })();
 }
 
 public translateWithOpenAI(text: string, targetLanguage: string): Promise<string> {
