@@ -8,7 +8,7 @@ import { json } from "express";
     providedIn: 'root'
 })
 export class appService {
-    private base_url = 'http://localhost:3000/';
+    private base_url = 'http://shareproduct.shop/';
     private url = "https://api.mercadolibre.com"
     private ACCESS_TOKEN = 'APP_USR-5074710933028386-071314-e402fe11ab48cef897f82b18187b8be5-1737844049';
     constructor(private httpClient: HttpClient){}
@@ -35,6 +35,14 @@ export class appService {
 
     cerrarSesion(){
       sessionStorage.removeItem('key');
+  }
+
+  public obtenerTienda():string| null{
+      return sessionStorage.getItem('key');
+  }
+
+  public establecerTienda(Tienda: string){
+    sessionStorage.setItem('key',Tienda);
   }
 
     public Iniciar(Tienda: string):Observable<any>{

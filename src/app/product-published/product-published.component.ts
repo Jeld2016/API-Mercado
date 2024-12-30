@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Producto } from '../models/models.interface';
 import { appService } from '../services/app.service';
 
@@ -9,13 +9,21 @@ import { appService } from '../services/app.service';
 })
 
 
-export class ProductPublishedComponent {
+export class ProductPublishedComponent implements OnInit{
 
   Tienda:string = '1737844049';
   scroll_id:string = '';
   sourceProducts: Producto[] = [];
 
   constructor(private app_service: appService){}
+
+
+  ngOnInit(): void {
+    const tiendaExiste = this.app_service.obtenerTienda();
+     if(tiendaExiste){
+      this.Tienda = tiendaExiste;
+     }
+  }
 
   public searchProduct(){
     console.log(this.Tienda)

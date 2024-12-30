@@ -22,6 +22,10 @@ export class ListProductComponent implements OnInit{
   constructor(private app_service: appService){}
 
   ngOnInit(): void {
+    const tiendaExiste = this.app_service.obtenerTienda();
+     if(tiendaExiste){
+      this.Tienda = tiendaExiste;
+     }
     this.app_service.precios().subscribe({
       next: value =>{
         this.rango_precios = value;
